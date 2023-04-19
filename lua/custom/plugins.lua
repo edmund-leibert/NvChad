@@ -139,7 +139,10 @@ local plugins = {
       },
     })
     end
-  }
+  },
+  {
+      
+  },
 }
 
   -- To make a plugin not be loaded
