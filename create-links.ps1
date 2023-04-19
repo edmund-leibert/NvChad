@@ -1,5 +1,8 @@
 Write-Host "Running the script: $($MyInvocation.MyCommand.Name)"
 
+# Delete all files currently in the nvim folder
+Remove-Item -Path "C:\\Users\\edmun\\AppData\\Local\\nvim\\*" -Recurse -Force
+
 # Get the current directory
 $currentDirectory = Get-Location
 
@@ -8,9 +11,9 @@ $CONFIG_ITEMS = Get-ChildItem -Path *
 
 foreach ($CONFIG_ITEM in $CONFIG_ITEMS) {
 	Write-Host "Creating a symbolic for the following files... $($CONFIG_ITEM.name)"
-	
+
 	# If object is the file init.lua
-	if($CONFIG_ITEM.Name -eq "init.lua") { 
+	if($CONFIG_ITEM.Name -eq "init.lua") {
 		New-Item -ItemType SymbolicLink -Path "C:\\Users\\edmun\\AppData\\Local\\nvim\\$($CONFIG_ITEM.name)" -Target "$($currentDirectory.Path)\\$($CONFIG_ITEM.name)"
 	}
 	if($CONFIG_ITEM.PSIsContainer -AND $CONFIG_ITEM.Name -eq "lua") {
