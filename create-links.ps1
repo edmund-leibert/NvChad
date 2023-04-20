@@ -3,6 +3,10 @@ Write-Host "Running the script: $($MyInvocation.MyCommand.Name)"
 # Delete all files currently in the nvim folder
 Remove-Item -Path "C:\\Users\\edmun\\AppData\\Local\\nvim\\*" -Recurse -Force
 
+# Delete all files currently in the nvim-data folder
+Remove-Item -Path "C:\\Users\\edmun\\AppData\\Local\\nvim-data\\*" -Recurse -Force
+
+
 # Get the current directory
 $currentDirectory = Get-Location
 
