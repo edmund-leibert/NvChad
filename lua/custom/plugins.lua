@@ -175,14 +175,30 @@ local plugins = {
           vim.cmd("startinsert!")
         end,
       })
-  
       function _lazygit_toggle()
         lazygit:toggle()
       end
-  
       vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
     end
   },
+  -- Telescope extensions
+  {
+    "nvim-telescope/telescope-project.nvim",
+    enabled = true,
+    lazy = false,
+    config = function()
+      require'telescope'.load_extension('project')
+      -- require'telescope'.extensions.project.project{}
+    end,
+  },
+  {
+    'mg979/vim-visual-multi',
+    branch = 'master',
+    lazy = false,
+    enabled = true,
+    config = function()
+    end
+  }
 }
 
   -- To make a plugin not be loaded
