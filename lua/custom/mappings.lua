@@ -16,18 +16,18 @@ M.gitui = {
   -- vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
 }
 
-M.telescope_project = {
+M.telescope_project_nvim = {
   plugin = true,
 
   n = {
     ["d"] = { "d", "Delete currently selected project", opts = { noremap = true} },
-    -- ["r"] = { "<cmd>Telescope live_grep<CR>", "Find in files" },
-    -- ["c"] = { "<cmd>Telescope buffers<CR>", "Find buffers" },
-    -- ["s"] = { "<cmd>Telescope help_tags<CR>", "Find help tags" },
-    -- ["b"] = { "<cmd>Telescope commands<CR>", "Find commands" },
-    -- ["w"] = { "<cmd>Telescope search_history<CR>", "Find search history" },
-    -- ["R"] = { "<cmd>Telescope registers<CR>", "Find registers" },
-    -- ["f"] = { "<cmd>Telescope marks<CR>", "Find marks" },
+    ["r"] = { "<cmd>Telescope live_grep<CR>", "Rename currently selected project", opts = { noremap = true}  },
+    ["c"] = { "<cmd>Telescope buffers<CR>", "Create a project", opts = { noremap = true} },
+    ["s"] = { "<cmd>Telescope help_tags<CR>", "Search inside files within your project", opts = { noremap = true} },
+    ["b"] = { "<cmd>Telescope commands<CR>", "Browse inside files within your project", opts = { noremap = true} },
+    ["w"] = { "<cmd>Telescope search_history<CR>", "Change to the selected project's directory without opening it", opts = { noremap = true} },
+    ["R"] = { "<cmd>Telescope registers<CR>", "Find a recently opened file within your project", opts = { noremap = true} },
+    ["f"] = { "<cmd>Telescope marks<CR>", "Find a file within your project (same as <CR>)", opts = { noremap = true} },
   }
 }
 
@@ -40,6 +40,7 @@ M.vim_visual_multi = {
     ["\\\\\\"] = { "<leader>\\", "Add Cursor At Pos", opts = { noremap = true } },
   }
 }
+
 -- more keybinds!
 
 return M
