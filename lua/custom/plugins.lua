@@ -73,6 +73,11 @@ local plugins = {
                 return
               end
 
+              -- Exclude autoformatting if the file is custom/plugins.lua
+              if vim.fn.expand "%:p" == "C:UsersedmunProjectsRepositoriesNvChadluacustomplugins.lua" then
+                return
+              end
+
               vim.lsp.buf.format {
                 async = false,
                 filter = function(c)
@@ -101,7 +106,10 @@ local plugins = {
     "nvim-tree/nvim-tree.lua",
     opts = overrides.nvimtree,
   },
-
+  {
+    "NvChad/nvterm",
+    enabled = false,
+  },
   -- Install a plugin
   {
     "max397574/better-escape.nvim",
@@ -134,7 +142,6 @@ local plugins = {
       },
     },
     config = function()
-      require("copilot").setup {}
       require("copilot").setup {
         suggestion = { enabled = false },
         panel = { enabled = false },
@@ -284,14 +291,6 @@ local plugins = {
     },
     config = function()
       require("telescope").load_extension "repo"
-    end,
-  },
-  {
-    "HUAHUAI23/telescope-session.nvim",
-    lazy = false,
-    enabled = false,
-    config = function()
-      require("telescope").load_extension "xray23"
     end,
   },
   {
@@ -651,125 +650,7 @@ local plugins = {
       require("dap-go").setup()
     end,
   },
-  {
-    "kevinhwang91/nvim-ufo",
-    enabled = true,
-    lazy = false,
-    dependencies = {
-      "kevinhwang91/promise-async",
-      {
-        "neoclide/coc.nvim",
-        branch = "master",
-        build = "yarn install --frozen-lockfile",
-        config = function()
-          require("ufo").setup()
-        end,
-      },
-    },
-    config = function()
-      local ftMap = {
-        vim = "indent",
-        python = { "indent" },
-        git = "",
-      }
-      require("ufo").setup {
-        open_fold_hl_timeout = 150,
-        close_fold_kinds = { "imports", "comment" },
-        preview = {
-          win_config = {
-            border = { "", "─", "", "", "", "─", "", "" },
-            winhighlight = "Normal:Folded",
-            winblend = 0,
-          },
-          mappings = {
-            scrollU = "<C-u>",
-            scrollD = "<C-d>",
-            jumpTop = "[",
-            jumpBot = "]",
-          },
-        },
-        provider_selector = function(bufnr, filetype, buftype)
-          -- if you prefer treesitter provider rather than lsp,
-          -- return ftMap[filetype] or {'treesitter', 'indent'}
-          return ftMap[filetype]
-
-          -- refer to ./doc/example.lua for detail
-        end,
-      }
-      vim.keymap.set("n", "zR", require("ufo").openAllFolds)
-      vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
-      vim.keymap.set("n", "zr", require("ufo").openFoldsExceptKinds)
-      vim.keymap.set("n", "zm", require("ufo").closeFoldsWith) -- closeAllFolds == closeFoldsWith(0)
-      vim.keymap.set("n", "K", function()
-        local winid = require("ufo").peekFoldedLinesUnderCursor()
-        if not winid then
-          -- choose one of coc.nvim and nvim lsp
-          vim.fn.CocActionAsync "definitionHover" -- coc.nvim
-          vim.lsp.buf.hover()
-        end
-      end)
-
-      local handler = function(virtText, lnum, endLnum, width, truncate)
-        local newVirtText = {}
-        local suffix = ("  %d "):format(endLnum - lnum)
-        local sufWidth = vim.fn.strdisplaywidth(suffix)
-        local targetWidth = width - sufWidth
-        local curWidth = 0
-        for _, chunk in ipairs(virtText) do
-          local chunkText = chunk[1]
-          local chunkWidth = vim.fn.strdisplaywidth(chunkText)
-          if targetWidth > curWidth + chunkWidth then
-            table.insert(newVirtText, chunk)
-          else
-            chunkText = truncate(chunkText, targetWidth - curWidth)
-            local hlGroup = chunk[2]
-            table.insert(newVirtText, { chunkText, hlGroup })
-            chunkWidth = vim.fn.strdisplaywidth(chunkText)
-            -- str width returned from truncate() may less than 2nd argument, need padding
-            if curWidth + chunkWidth < targetWidth then
-              suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
-            end
-            break
-          end
-          curWidth = curWidth + chunkWidth
-        end
-        table.insert(newVirtText, { suffix, "MoreMsg" })
-        return newVirtText
-      end
-
-      -- global handler
-      -- `handler` is the 2nd parameter of `setFoldVirtTextHandler`,
-      -- check out `./lua/ufo.lua` and search `setFoldVirtTextHandler` for detail.
-      require("ufo").setup {
-        fold_virt_text_handler = handler,
-      }
-
-      -- buffer scope handler
-      -- will override global handler if it is existed
-      local bufnr = vim.api.nvim_get_current_buf()
-      require("ufo").setFoldVirtTextHandler(bufnr, handler)
-    end,
-  },
-  {
-    "rmagatti/auto-session",
-    enabled = false,
-    lazy = false,
-    {
-      "nvim-lualine/lualine.nvim",
-    },
-    config = function()
-      require("auto-session").setup {
-        log_level = "error",
-        auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-      }
-      require("lualine").setup {
-        options = {
-          theme = "tokyonight",
-        },
-        sections = { lualine_c = { require("auto-session-library").current_session_name } },
-      }
-    end,
-  },
+  {},
 }
 
 -- To make a plugin not be loaded
